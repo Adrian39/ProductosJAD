@@ -1,13 +1,19 @@
 package com.example.ezloop.productosjad
 
+import android.graphics.Point
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.View
+import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.TextView
 import com.example.ezloop.productosjad.Data.Product
 import com.example.ezloop.productosjad.RVAdapters.ProductListAdapter
+import com.example.ezloop.productosjad.RVAdapters.ShoppingListAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -15,7 +21,11 @@ class MainActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_cart -> {
-                message.setText(R.string.title_cart)
+                //message.setText(R.string.title_cart)
+                scAdapter?.notifyDataSetChanged()
+                scAdapter?.updateTotal()
+                txtTotal?.text = "$" + (scAdapter?.Total).toString()
+                showShoppingCart()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_settings -> {
@@ -30,9 +40,22 @@ class MainActivity : AppCompatActivity() {
         false
     }
 
+    private val animationDuration = 500L
+    var shoppingcartView: ConstraintLayout? = null
+    var scAdapter: ShoppingListAdapter? = null
+    var txtTotal: TextView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //Move Layouts to starting position
+        shoppingcartView = findViewById(R.id.clShoppingCart)
+        val display = windowManager.defaultDisplay
+        val size = Point()
+        display.getSize(size)
+        shoppingcartView?.x = size.x.toFloat()
+
         var productList = ArrayList<Product>()
         productList.add(
             Product(1L, "Test1", "Description1",
@@ -46,11 +69,29 @@ class MainActivity : AppCompatActivity() {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        //RECYCLER VIEWS
-        //Products
+        //Products RecyclerView
         val rvProducts = findViewById(R.id.rvProducts) as RecyclerView
-        rvProducts.layoutManager = LinearLayoutManager(this, LinearLayout.HORIZONTAL, false)
+        rvProducts.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
         val adapter = ProductListAdapter(productList)
         rvProducts.adapter = adapter
+
+        //Shopping cart RecyclerView
+        val rvShoppingCart = findViewById(R.id.rvShoppingCart) as RecyclerView
+        rvShoppingCart.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
+        scAdapter = ShoppingListAdapter(adapter.currentOrder)
+        rvShoppingCart.adapter = scAdapter
+
+        //Shopping cart Total
+        txtTotal = findViewById(R.id.txtTotal) as TextView
+    }
+
+    //Show shopping cart
+    fun showShoppingCart(){
+        shoppingcartView?.animate()?.x(0.0f)?.duration = animationDuration
+    }
+
+    //Hide shopping cart
+    fun hideShoppingCart(theView: View){
+        shoppingcartView?.animate()?.x(shoppingcartView?.width!!.toFloat())?.duration = animationDuration
     }
 }
