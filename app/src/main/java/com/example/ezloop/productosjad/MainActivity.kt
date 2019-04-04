@@ -49,6 +49,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //Shopping cart Total
+        txtTotal = findViewById(R.id.txtTotal) as TextView
+
         //Move Layouts to starting position
         shoppingcartView = findViewById(R.id.clShoppingCart)
         val display = windowManager.defaultDisplay
@@ -78,11 +81,8 @@ class MainActivity : AppCompatActivity() {
         //Shopping cart RecyclerView
         val rvShoppingCart = findViewById(R.id.rvShoppingCart) as RecyclerView
         rvShoppingCart.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
-        scAdapter = ShoppingListAdapter(adapter.currentOrder)
+        scAdapter = ShoppingListAdapter(adapter.currentOrder, txtTotal)
         rvShoppingCart.adapter = scAdapter
-
-        //Shopping cart Total
-        txtTotal = findViewById(R.id.txtTotal) as TextView
     }
 
     //Show shopping cart

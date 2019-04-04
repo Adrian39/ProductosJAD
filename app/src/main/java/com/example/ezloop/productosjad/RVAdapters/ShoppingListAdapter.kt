@@ -9,7 +9,7 @@ import android.widget.TextView
 import com.example.ezloop.productosjad.Data.Product
 import com.example.ezloop.productosjad.R
 
-class ShoppingListAdapter(val shoppingList: ArrayList<Product>) : RecyclerView.Adapter<ShoppingListAdapter.ViewHolder>(){
+class ShoppingListAdapter(val shoppingList: ArrayList<Product>, val txtTotal: TextView?) : RecyclerView.Adapter<ShoppingListAdapter.ViewHolder>(){
 
     var Total: Float = 0f
 
@@ -27,6 +27,7 @@ class ShoppingListAdapter(val shoppingList: ArrayList<Product>) : RecyclerView.A
         p0?.txtItemName.text = product.name
         p0?.txtItemPrice.text = "$" + (product.quantity * product.price).toString()
 
+        //Item is deleted from shopping cart
         p0?.btnDelete.setOnClickListener {
             shoppingList.removeAt(p1)
             notifyItemRemoved(p1)
@@ -46,5 +47,6 @@ class ShoppingListAdapter(val shoppingList: ArrayList<Product>) : RecyclerView.A
         for (n in shoppingList){
             Total += (n.price * n.quantity)
         }
+        txtTotal?.text = "$" + (Total).toString()
     }
 }
