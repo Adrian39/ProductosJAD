@@ -12,6 +12,10 @@
     <string name="lbl_add_to_order">Add to order</string>
     <string name="lbl_skip">Skip</string>
     <string name="lbl_total">Total</string>
+    <string name="lbl_client_info">Client Info</string>
+    <string name="lbl_bsns_name">Business name</string>
+    <string name="lbl_address">Address</string>
+    <string name="lbl_phone">Phone</string>
 
     <!--Navigation Bar-->
     <string name="title_cart">Order</string>
@@ -21,4 +25,6 @@
     <!--Buttons-->
     <string name="btn_checkout">Checkout</string>
     <string name="btn_return">Return</string>
+    <string name="btn_save">Save</string>
+
 </resources>
