@@ -267,8 +267,10 @@
                         android:layout_height="wrap_content"
                         android:background="@color/colorAccent"
                         android:text="@string/btn_save"
-                        android:textColor="@color/colorIcons" android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toEndOf="parent" android:layout_marginBottom="16dp"
+                        android:textColor="@color/colorIcons"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginBottom="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"/>
 
             </android.support.constraint.ConstraintLayout>

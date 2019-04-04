@@ -29,7 +29,8 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_settings -> {
-                message.setText(R.string.title_settings)
+                //message.setText(R.string.title_settings)
+                showUserInfo()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_category -> {
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     private val animationDuration = 500L
     var shoppingcartView: ConstraintLayout? = null
+    var userInfoView: ConstraintLayout? = null
     var scAdapter: ShoppingListAdapter? = null
     var txtTotal: TextView? = null
 
@@ -54,10 +56,12 @@ class MainActivity : AppCompatActivity() {
 
         //Move Layouts to starting position
         shoppingcartView = findViewById(R.id.clShoppingCart)
+        userInfoView = findViewById(R.id.clUserInfo)
         val display = windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
         shoppingcartView?.x = size.x.toFloat()
+        userInfoView?.x = size.x.toFloat()
 
         var productList = ArrayList<Product>()
         productList.add(
@@ -93,5 +97,15 @@ class MainActivity : AppCompatActivity() {
     //Hide shopping cart
     fun hideShoppingCart(theView: View){
         shoppingcartView?.animate()?.x(shoppingcartView?.width!!.toFloat())?.duration = animationDuration
+    }
+
+    //Show shopping cart
+    fun showUserInfo(){
+        userInfoView?.animate()?.x(0.0f)?.duration = animationDuration
+    }
+
+    //Hide shopping cart
+    fun hideUserInfo(theView: View){
+        userInfoView?.animate()?.x(shoppingcartView?.width!!.toFloat())?.duration = animationDuration
     }
 }
