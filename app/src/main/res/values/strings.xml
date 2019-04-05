@@ -27,4 +27,9 @@
     <string name="btn_return">Return</string>
     <string name="btn_save">Save</string>
 
+    <!--Preference keys-->
+    <string name="key_bsns_name">Name</string>
+    <string name="key_address">Address</string>
+    <string name="key_phone">Phone</string>
+
 </resources>

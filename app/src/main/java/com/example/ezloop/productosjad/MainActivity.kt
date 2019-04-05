@@ -1,5 +1,6 @@
 package com.example.ezloop.productosjad
 
+import android.content.Context
 import android.graphics.Point
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
@@ -11,6 +12,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import com.example.ezloop.productosjad.Data.Product
 import com.example.ezloop.productosjad.RVAdapters.ProductListAdapter
 import com.example.ezloop.productosjad.RVAdapters.ShoppingListAdapter
@@ -18,21 +20,27 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    //Handler for navigation bar
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
+            //Selected shopping cart
             R.id.navigation_cart -> {
                 //message.setText(R.string.title_cart)
                 scAdapter?.notifyDataSetChanged()
                 scAdapter?.updateTotal()
                 txtTotal?.text = "$" + (scAdapter?.Total).toString()
+                hideUserInfo()
                 showShoppingCart()
                 return@OnNavigationItemSelectedListener true
             }
+            //Selected settings
             R.id.navigation_settings -> {
                 //message.setText(R.string.title_settings)
+                hideShoppingCart()
                 showUserInfo()
                 return@OnNavigationItemSelectedListener true
             }
+            //Selected category
             R.id.navigation_category -> {
                 message.setText(R.string.title_category)
                 return@OnNavigationItemSelectedListener true
@@ -41,17 +49,29 @@ class MainActivity : AppCompatActivity() {
         false
     }
 
+    //Animation variables
     private val animationDuration = 500L
     var shoppingcartView: ConstraintLayout? = null
     var userInfoView: ConstraintLayout? = null
     var scAdapter: ShoppingListAdapter? = null
     var txtTotal: TextView? = null
 
+    //User data fields
+    var txtName: TextView? = null
+    var txtPhone: TextView? = null
+    var txtAddress: TextView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //Shopping cart Total
+        //Initialize user data elements
+        txtName = findViewById(R.id.txtBsnName) as TextView
+        txtPhone = findViewById(R.id.txtPhone) as TextView
+        txtAddress = findViewById(R.id.txtAddress) as TextView
+
+
+        //Shopping cart elements
         txtTotal = findViewById(R.id.txtTotal) as TextView
 
         //Move Layouts to starting position
@@ -74,6 +94,7 @@ class MainActivity : AppCompatActivity() {
             Product(3L, "Test3", "Description3",
                 R.drawable.test_image_3, 12.00f, 0))
 
+        //Set handler for navigation bar
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         //Products RecyclerView
@@ -87,6 +108,12 @@ class MainActivity : AppCompatActivity() {
         rvShoppingCart.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
         scAdapter = ShoppingListAdapter(adapter.currentOrder, txtTotal)
         rvShoppingCart.adapter = scAdapter
+
+        //Read preference data
+        val sharedPreferences = this.getPreferences(Context.MODE_PRIVATE) ?: return
+        txtName?.text = sharedPreferences.getString(getString(R.string.key_bsns_name), "")
+        txtAddress?.text = sharedPreferences.getString(getString(R.string.key_address), "")
+        txtPhone?.text = sharedPreferences.getString(getString(R.string.key_phone), "")
     }
 
     //Show shopping cart
@@ -95,7 +122,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Hide shopping cart
-    fun hideShoppingCart(theView: View){
+    fun hideShoppingCart(){
         shoppingcartView?.animate()?.x(shoppingcartView?.width!!.toFloat())?.duration = animationDuration
     }
 
@@ -105,7 +132,38 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Hide shopping cart
-    fun hideUserInfo(theView: View){
+    fun hideUserInfo(){
         userInfoView?.animate()?.x(shoppingcartView?.width!!.toFloat())?.duration = animationDuration
+    }
+
+    //Save button
+    fun saveButton(theView: View){
+        val sharedPref = this.getPreferences(Context.MODE_PRIVATE) ?: return
+        with(sharedPref.edit()){
+            putString(getString(R.string.key_bsns_name), txtName?.text.toString())
+            putString(getString(R.string.key_address), txtAddress?.text.toString())
+            putString(getString(R.string.key_phone), txtPhone?.text.toString())
+            commit()
+        }
+        hideUserInfo()
+    }
+
+    //Return button
+    fun returnButton(theView: View){
+        hideShoppingCart()
+    }
+
+    //Checkout button
+    fun checkoutButton(theView: View){
+        val sharedPreferences = this.getPreferences(Context.MODE_PRIVATE) ?: return
+        if (sharedPreferences.getString(getString(R.string.key_bsns_name), "").isNullOrEmpty()
+            || sharedPreferences.getString(getString(R.string.key_address), "").isNullOrEmpty()
+            || sharedPreferences.getString(getString(R.string.key_phone), "").isNullOrEmpty()){
+            Toast.makeText(this, "Please enter your info", Toast.LENGTH_SHORT).show()
+            showUserInfo()
+        }
+        else{
+            Toast.makeText(this, "Order has been placed", Toast.LENGTH_SHORT).show()
+        }
     }
 }

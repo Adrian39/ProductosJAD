@@ -116,12 +116,13 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp"/>
+                        android:layout_marginBottom="16dp" android:onClick="checkoutButton"/>
 
                 <Button
                         android:id="@+id/btnReturn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        style="?android:attr/borderlessButtonStyle"
                         android:textSize="@dimen/font_button"
                         android:text="@string/btn_return"
                         android:background="@color/colorIcons"
@@ -129,7 +130,7 @@
                         android:layout_marginBottom="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toStartOf="@+id/btnCheckout" android:onClick="hideShoppingCart"/>
+                        app:layout_constraintEnd_toStartOf="@+id/btnCheckout" android:onClick="returnButton"/>
             </android.support.constraint.ConstraintLayout>
 
         </android.support.v7.widget.CardView>
@@ -248,7 +249,7 @@
                         app:layout_constraintEnd_toStartOf="@+id/icoPhone"
                         android:layout_marginEnd="56dp"
                         android:textSize="@dimen/font_body_2"
-                        android:hint="@string/lbl_phone"/>
+                        android:hint="@string/lbl_phone" android:inputType="phone"/>
 
                 <ImageView
                         android:id="@+id/icoPhone"
@@ -271,7 +272,7 @@
                         android:layout_marginEnd="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginBottom="16dp"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintBottom_toBottomOf="parent" android:onClick="saveButton"/>
 
             </android.support.constraint.ConstraintLayout>
 
